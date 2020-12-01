@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Ignore puzzle output
+/AdventOfCode2020/Day*/output.txt
