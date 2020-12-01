@@ -340,4 +340,4 @@ ASALocalRun/
 healthchecksdb
 
 # Ignore puzzle output
-/AdventOfCode2020/Day*/output.txt
+/AdventOfCode2020/Day*/output*.txt
