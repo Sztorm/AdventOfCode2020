@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace AdventOfCode2020
 {
@@ -32,6 +30,24 @@ namespace AdventOfCode2020
 
         private static void RunPart2(PasswordInfo[] inputValues)
         {
+            int validPasswordInfosCount = inputValues.Where(passInfo =>
+            {
+                string pass = passInfo.PossibleCorruptedPassword;
+                char reqChar = passInfo.RequiredCharacter;
+
+                if (passInfo.MaxRequiredCharacterCount > pass.Length)
+                {
+                    return false;
+                }
+                int firstPos = passInfo.MinRequiredCharacterCount - 1;
+                int secondPos = passInfo.MaxRequiredCharacterCount - 1;
+
+                return pass[firstPos] == reqChar && pass[secondPos] != reqChar || 
+                    pass[firstPos] != reqChar && pass[secondPos] == reqChar;
+            }).Count();
+
+            PuzzleIOManager.SaveTextLines(
+                RelativeOutputPaths[1], new string[] { validPasswordInfosCount.ToString() });
         }
 
         public static void Run()
