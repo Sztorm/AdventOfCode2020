@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020
 {
+    using static PassportDataValidator;
+
     public readonly struct PassportData
     {
         private const string BirthYearKey = "byr";
@@ -24,6 +26,16 @@ namespace AdventOfCode2020
         public readonly string? PassportID;
         public readonly string? CountryID;
 
+        public PassportData Validated => new(
+            IsValidBirthYear(BirthYear) ? BirthYear : null,
+            IsValidIssueYear(IssueYear) ? IssueYear : null,
+            IsValidExpirationYear(ExpirationYear) ? ExpirationYear : null,
+            IsValidHeight(Height) ? Height : null,
+            IsValidHairColor(HairColor) ? HairColor : null,
+            IsValidEyeColor(EyeColor) ? EyeColor : null,
+            IsValidPassportID(PassportID) ? PassportID : null,
+            CountryID);
+
         public PassportData(
             string? birthYear = null,
             string? issueYear = null,
@@ -42,6 +54,20 @@ namespace AdventOfCode2020
             EyeColor = eyeColor;
             PassportID = passportID;
             CountryID = countryID;
+        }
+
+        public static PassportData Parse(string s)
+        {
+            const int KeyCount = 8;
+            MatchCollection matches = PassportDataRegex.Matches(s);
+            Dictionary<string, string> passportKeyValuePairs = new(KeyCount);
+
+            for (int i = 0, count = matches.Count; i < count; i++)
+            {
+                GroupCollection groups = matches[i].Groups;
+                passportKeyValuePairs.Add(groups[1].Value, groups[2].Value);
+            }
+            return GetParsedData(passportKeyValuePairs);
         }
 
         private static PassportData GetParsedData(Dictionary<string, string> parsedKeyValuePairs)
@@ -72,20 +98,6 @@ namespace AdventOfCode2020
                 eyeColor,
                 passportID,
                 countryID);
-        }
-
-        public static PassportData Parse(string s)
-        {
-            const int KeyCount = 8;
-            MatchCollection matches = PassportDataRegex.Matches(s);
-            Dictionary<string, string> passportKeyValuePairs = new(KeyCount);
-
-            for (int i = 0, count = matches.Count; i < count; i++)
-            {
-                GroupCollection groups = matches[i].Groups;
-                passportKeyValuePairs.Add(groups[1].Value, groups[2].Value);
-            }
-            return GetParsedData(passportKeyValuePairs);
         }
     }
 }

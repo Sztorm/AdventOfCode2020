@@ -31,8 +31,17 @@ namespace AdventOfCode2020
 
         private static void RunPart2(List<string> inputValues)
         {
+            int validQuasiPassportsCount = 0;
+
+            for (int i = 0, count = inputValues.Count; i < count; i++)
+            {
+                PassportData validatedPassportData = PassportData.Parse(inputValues[i]).Validated;
+                validQuasiPassportsCount += Convert.ToInt32(
+                    PassportDataValidator.AreValidNorthPoleCredentials(validatedPassportData));
+            }
+
             PuzzleIOManager.SaveTextLines(
-                RelativeOutputPaths[1], new string[] { default /*result*/ });
+                RelativeOutputPaths[1], new string[] { validQuasiPassportsCount.ToString() });
         }
 
         private static List<string> GetInputValues(string[] inputLines)
@@ -62,7 +71,7 @@ namespace AdventOfCode2020
             List<string> inputValues = GetInputValues(inputLines);
 
             RunPart1(inputValues);
-            //RunPart2(inputLines);
+            RunPart2(inputValues);
         }
     }
 }
