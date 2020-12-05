@@ -30,30 +30,22 @@ namespace AdventOfCode2020
 
             for (int i = 0; i < 7; i++)
             {
-                if (s[i] == 'F')
-                {
-                    continue;
-                }
-                else if (s[i] == 'B')
+                if (s[i] == 'B')
                 {
                     row |= 1 << (6 - i);
                 }
-                else
+                else if (s[i] != 'F')
                 {
                     throw ParseFormatException;
                 }
             }
             for (int i = 7; i < 10; i++)
             {
-                if (s[i] == 'L')
-                {
-                    continue;
-                }
-                else if (s[i] == 'R')
+                if (s[i] == 'R')
                 {
                     column |= 1 << (9 - i);
                 }
-                else
+                else if (s[i] != 'L')
                 {
                     throw ParseFormatException;
                 }

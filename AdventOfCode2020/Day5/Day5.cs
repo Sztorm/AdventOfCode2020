@@ -22,8 +22,24 @@ namespace AdventOfCode2020
 
         private static void RunPart2(SeatInfo[] inputValues)
         {
+            IOrderedEnumerable<SeatInfo> orderedInput = inputValues.OrderBy(seat => seat.ID);
+
+            int prevSeatID = orderedInput.First().ID;
+            int mySeatID = prevSeatID;
+
+            foreach (SeatInfo seat in orderedInput.Skip(1))
+            {
+                int currentSeatID = seat.ID;
+
+                if (currentSeatID - 1 != prevSeatID)
+                {
+                    mySeatID = currentSeatID - 1;
+                }
+                prevSeatID = currentSeatID;
+            }
+
             PuzzleIOManager.SaveTextLines(
-                RelativeOutputPaths[1], new string[] { default /*result*/ });
+                RelativeOutputPaths[1], new string[] { mySeatID.ToString() } );
         }
 
         public static void Run()
@@ -34,7 +50,7 @@ namespace AdventOfCode2020
                 .ToArray();
 
             RunPart1(inputValues);
-            //RunPart2(inputValues);
+            RunPart2(inputValues);
         }
     }
 }
