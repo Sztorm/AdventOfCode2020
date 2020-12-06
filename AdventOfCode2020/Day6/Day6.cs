@@ -19,9 +19,9 @@ namespace AdventOfCode2020
 
             for (int i = 0, length = inputValues.Count; i < length; i++)
             {
-                result += QuestionnaireGroup
-                    .Parse(inputValues[i].Span)
-                    .AnsweredQuestionCount;
+                result += QuestionnaireGroup.Parse(inputValues[i].Span)
+                    .AnyCommonAnswers
+                    .AnsweredQuestionCount();
             }
 
             PuzzleIOManager.SaveTextLines(
@@ -30,8 +30,17 @@ namespace AdventOfCode2020
 
         private static void RunPart2(List<ReadOnlyMemory<string>> inputValues)
         {
+            int result = 0;
+
+            for (int i = 0, length = inputValues.Count; i < length; i++)
+            {
+                result += QuestionnaireGroup.Parse(inputValues[i].Span)
+                    .AllCommonAnswers
+                    .AnsweredQuestionCount();
+            }
+
             PuzzleIOManager.SaveTextLines(
-                RelativeOutputPaths[1], new string[] { default });
+                RelativeOutputPaths[1], new string[] { result.ToString() });
         }
 
         public static List<ReadOnlyMemory<string>> GetInputValues(string[] inputLines)
@@ -58,7 +67,7 @@ namespace AdventOfCode2020
             List<ReadOnlyMemory<string>> inputValues = GetInputValues(inputLines);
 
             RunPart1(inputValues);
-            ///RunPart2(inputValues);
+            RunPart2(inputValues);
         }
     }
 }

@@ -41,5 +41,17 @@ namespace AdventOfCode2020
         public static bool HasLetter(
             this QuestionnaireGroup.QuestionnaireAnswers source, char letter)
             => ((int)source & (1 << (letter - 'a'))) != 0;
+
+        public static int AnsweredQuestionCount(this QuestionnaireGroup.QuestionnaireAnswers source)
+        {
+            const int QuestionCount = 26;
+            int result = 0;
+
+            for (int i = 0; i < QuestionCount; i++)
+            {
+                result += ((int)source >> i) & 1;
+            }
+            return result;
+        }
     }
 }

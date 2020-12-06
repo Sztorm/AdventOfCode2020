@@ -4,30 +4,44 @@ namespace AdventOfCode2020
 {
     public readonly partial struct QuestionnaireGroup
     {
-        public const int QuestionCount = 26;
+        private readonly QuestionnaireAnswers[] AnswersArray;
 
-        public readonly QuestionnaireAnswers Answers;
-        public readonly int PeopleCount;
+        public int Count => AnswersArray.Length;
 
-        public int AnsweredQuestionCount
+        public QuestionnaireAnswers AnyCommonAnswers
         {
             get
             {
-                int result = 0;
+                QuestionnaireAnswers result = QuestionnaireAnswers.None;
 
-                for (int i = 0; i < QuestionCount; i++)
+                for (int i = 0, length = AnswersArray.Length; i < length; i++)
                 {
-                    result += ((int)Answers >> i) & 1;
+                    result |= AnswersArray[i];
                 }
                 return result;
             }
         }
 
-        public QuestionnaireGroup(int peopleCount, QuestionnaireAnswers answers)
+        public QuestionnaireAnswers AllCommonAnswers
         {
-            PeopleCount = peopleCount;
-            Answers = answers;
+            get
+            {
+                if (Count == 0)
+                {
+                    return QuestionnaireAnswers.None;
+                }
+                QuestionnaireAnswers result = AnswersArray[0];
+
+                for (int i = 1, length = AnswersArray.Length; i < length; i++)
+                {
+                    result &= AnswersArray[i];
+                }
+                return result;
+            }
         }
+
+        public QuestionnaireGroup(QuestionnaireAnswers[] answersArray)
+            => AnswersArray = answersArray;
 
         private static bool IsSmallLetterInLatinAlphabet(char value)
             => value >= 'a' && value <= 'z';
@@ -75,7 +89,7 @@ namespace AdventOfCode2020
             {
                 throw ParseFormatException;
             }
-            QuestionnaireAnswers result = QuestionnaireAnswers.None;
+            var resultAnswers = new QuestionnaireAnswers[answersLenght];
 
             for (int i = 0; i < answersLenght; i++)
             {
@@ -83,9 +97,9 @@ namespace AdventOfCode2020
                 {
                     throw ParseFormatException;
                 }
-                result |= ParseAnswers(answers[i]);
+                resultAnswers[i] = ParseAnswers(answers[i]);
             }
-            return new QuestionnaireGroup(answersLenght, result);
+            return new QuestionnaireGroup(resultAnswers);
         }
     }
 }
