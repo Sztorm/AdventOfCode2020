@@ -16,7 +16,7 @@ namespace AdventOfCode2020
         public override string ToString() => $"Row: {Row}, Column: {Column}, ID: {ID}";
 
         private static FormatException ParseFormatException
-            => new FormatException("the provided string has wrong format. The string must have " +
+            => new FormatException("The provided string has wrong format. The string must have " +
                     "length of 10. The first seven characters should consist of F or B while " +
                     "the last 3 characters should consist of R and L.");
 
