@@ -25,5 +25,20 @@ namespace AdventOfCode2020
             }
             return result;
         }
+
+        public static int GetOccurenceCount<T>(this ReadOnlySpan<T> collection, T value)
+            where T : IEquatable<T>
+        {
+            int result = 0;
+
+            for (int i = 0, length = collection.Length; i < length; i++)
+            {
+                if (collection[i].Equals(value))
+                {
+                    result++;
+                }
+            }
+            return result;
+        }
     }
 }
