@@ -50,5 +50,55 @@ namespace AdventOfCode2020
             while(instructionIndex < instructionLength && TryExecuteNextInstruction()) {}
             return result;
         }
+
+        private void ToggleCorruptedInstruction(int index)
+        {
+            ref Instruction instruction = ref program[index];
+            instruction = instruction.With(instruction.Type == InstructionType.NOP ?
+                InstructionType.JMP : InstructionType.NOP);
+        }
+
+        private void ModifyCorruptedInstructions(ref int possibleCorruptedInstructionIndex)
+        {
+            if (possibleCorruptedInstructionIndex - 1 >= 0)
+            {
+                ToggleCorruptedInstruction(possibleCorruptedInstructionIndex - 1);
+            }
+            int instructionLength = program.Length;
+
+            for (int i = possibleCorruptedInstructionIndex; i < instructionLength; i++)
+            {
+                ref Instruction instruction = ref program[i];
+
+                if (instruction.Type == InstructionType.NOP || instruction.Type == InstructionType.JMP)
+                {
+                    possibleCorruptedInstructionIndex = i + 1;
+                    ToggleCorruptedInstruction(i);
+                    return;
+                }
+            }
+        }
+
+        public int RunAndFix(Instruction[] program)
+        {
+            int instructionLength = program.Length;
+            this.program = program;
+            result = 0;
+            visitedIndices = new BitArray(instructionLength);
+            instructionIndex = 0;
+            int possibleCorruptedInstructionIndex = 0;
+
+            while (instructionIndex < instructionLength) 
+            {
+                if (!TryExecuteNextInstruction())
+                {
+                    ModifyCorruptedInstructions(ref possibleCorruptedInstructionIndex);
+                    visitedIndices.SetAll(false);
+                    result = 0;
+                    instructionIndex = 0;
+                }
+            }
+            return result;
+        }
     }
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace AdventOfCode2020
 {
     public static class Day8
@@ -25,7 +21,8 @@ namespace AdventOfCode2020
 
         private static void RunPart2(Instruction[] inputValues)
         {
-            int result = 0;
+            ConsoleInstructionInterpreter interpreter = new();
+            int result = interpreter.RunAndFix(inputValues);
 
             PuzzleIOManager.SaveTextLines(
                 RelativeOutputPaths[1], new string[] { result.ToString() });
@@ -37,7 +34,7 @@ namespace AdventOfCode2020
             Instruction[] inputValues = InstructionParser.Parse(inputLines);
 
             RunPart1(inputValues);
-            // RunPart2(inputValues);
+            RunPart2(inputValues);
         }
     }
 }

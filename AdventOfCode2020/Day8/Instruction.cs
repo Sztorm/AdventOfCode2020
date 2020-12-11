@@ -14,6 +14,10 @@ namespace AdventOfCode2020
         public Instruction(InstructionType type, int argument)
             => (Type, Argument) = (type, argument);
 
+        public Instruction With(InstructionType type) => new Instruction(type, Argument);
+
+        public Instruction WithArgument(int argument) => new Instruction(Type, argument);
+
         private static bool IsDigit(char character) => character >= '0' && character <= '9';
 
         private static FormatException ParseFormatException => new (
