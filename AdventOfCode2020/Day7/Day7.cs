@@ -36,7 +36,7 @@ namespace AdventOfCode2020
 
                         if (bagInContents.Name == ShinyGoldBag.Name)
                         {
-                            result.TryAdd(bag, 1/*bagInContents.Count*/);
+                            result.TryAdd(bag, 1);
                             break;
                         }
                     }
@@ -49,7 +49,7 @@ namespace AdventOfCode2020
             return result;
         }
 
-        private static int GetCount(BagInfo bag, HashSet<BagInfo> inputValues, Dictionary<BagInfo, int> bagsWithCounts)
+        private static int GetGoldBagCount(BagInfo bag, HashSet<BagInfo> inputValues, Dictionary<BagInfo, int> bagsWithCounts)
         {
             if (bagsWithCounts[bag] != -1)
             {
@@ -71,7 +71,7 @@ namespace AdventOfCode2020
                     }
                     else
                     {
-                        count = GetCount(resultBag.Contents[i], inputValues, bagsWithCounts);
+                        count = GetGoldBagCount(resultBag.Contents[i], inputValues, bagsWithCounts);
                     }
                     if (count != 0)
                     {
@@ -92,7 +92,7 @@ namespace AdventOfCode2020
             {
                 if (bagsWithCounts[bagWithoutSpecifiedCount] == -1)
                 {
-                    bagsWithCounts[bagWithoutSpecifiedCount] = GetCount(bagWithoutSpecifiedCount, inputValues, bagsWithCounts);
+                    bagsWithCounts[bagWithoutSpecifiedCount] = GetGoldBagCount(bagWithoutSpecifiedCount, inputValues, bagsWithCounts);
                 }
             }
         }
@@ -107,10 +107,28 @@ namespace AdventOfCode2020
                 RelativeOutputPaths[0], new string[] { result.ToString() });
         }
 
-        private static void RunPart2(BagInfo[] inputValues)
+        private static int GetBagCountIn(BagInfo bag, HashSet<BagInfo> inputValues)
         {
+            inputValues.TryGetValue(bag, out BagInfo resultBag);
+            int bagContentsLength = resultBag.Contents.Length;
+            int result = 1;
+
+            for (int i = 0; i < bagContentsLength; i++)
+            {
+                if (resultBag.Contents[i].Count > 0)
+                {
+                    result += resultBag.Contents[i].Count * GetBagCountIn(resultBag.Contents[i], inputValues);
+                }
+            }
+            return result;
+        }
+
+        private static void RunPart2(HashSet<BagInfo> inputValues)
+        {
+            int result = GetBagCountIn(ShinyGoldBag, inputValues) - 1;
+
             PuzzleIOManager.SaveTextLines(
-                RelativeOutputPaths[1], new string[] { default /*result*/ });
+                RelativeOutputPaths[1], new string[] { result.ToString() });
         }
 
         private static HashSet<BagInfo> GetInputValues(string[] inputLines)
@@ -130,7 +148,7 @@ namespace AdventOfCode2020
             HashSet<BagInfo> inputValues = GetInputValues(inputLines);
 
             RunPart1(inputValues);
-            // RunPart2(inputValues);
+            RunPart2(inputValues);
         }
     }
 }
